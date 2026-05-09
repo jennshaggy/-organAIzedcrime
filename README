@@ -1,0 +1,36 @@
+# OrganAIzedCrime
+
+A CLI for querying MITRE ATLAS: The adversarial threat matrix for AI/ML systems.
+
+Built as the bedrock layer of a larger AI/ML offensive security learning platform.
+
+## Setup
+
+    git clone https://github.com/jennshaggy/-organAIzedcrime.git
+    cd -organAIzedcrime
+    go build -o atlas .
+    ./atlas fetch
+
+## Commands
+
+    atlas fetch                        Download latest ATLAS data from GitHub
+    atlas tactics list                 List all tactics
+    atlas tactic get <name>            Get a tactic and its techniques
+    atlas technique get <id>           Get a technique by ATLAS ID (e.g. AML.T0000)
+
+## Example
+
+    $ atlas tactic get reconnaissance
+
+    === Reconnaissance ===
+    The adversary is trying to gather information...
+
+    --- Techniques ---
+      [AML.T0000] Search Open Technical Databases
+      [AML.T0002] Search Victim-Owned Websites
+
+## Built with
+
+- [Go](https://golang.org)
+- [Cobra](https://github.com/spf13/cobra)
+- [MITRE ATLAS](https://atlas.mitre.org)
