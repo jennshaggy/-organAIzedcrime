@@ -7,9 +7,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var banner = "\n" +
+	`,.  ,           .` + "\n" +
+	`                    /  \ |           |         o` + "\n" +
+	`,-. ;-. ,-: ,-: ;-. |--| | ,-, ,-. ,-| ,-. ;-. . ;-.-. ,-.` + "\n" +
+	`| | |   | | | | | | |  | |  /  |-' | | |   |   | | | | |-'` + "\n" +
+	"`-' '   `-| `-` ' ' '  ' ' '-' `-' `-' `-' '   ' ' ' ' `-'" + "\n" +
+	"        `-'\n"
+
 var rootCmd = &cobra.Command{
 	Use:   "atlas",
 	Short: "OrganAIzedCrime: Query MITRE ATLAS AI/ML threat data",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		fmt.Println(banner)
+	},
 }
 
 func Execute() {
