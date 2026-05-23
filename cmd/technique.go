@@ -7,8 +7,11 @@ import (
 
 	"github.com/jennshaggy/organAIzedcrime/loader"
 	"github.com/jennshaggy/organAIzedcrime/renderer"
+	"github.com/jennshaggy/organAIzedcrime/tools"
 	"github.com/spf13/cobra"
 )
+
+var showTools bool
 
 var techniqueCmd = &cobra.Command{
 	Use:   "technique",
@@ -38,6 +41,21 @@ var techniqueGetCmd = &cobra.Command{
 					} else {
 						fmt.Println("Class: Technique. The whole enchilada.")
 					}
+
+					if showTools {
+						toolList := tools.Get(query)
+						if len(toolList) == 0 {
+							fmt.Println("\n--- Tools ---")
+							fmt.Println("  [-] No tools mapped for this technique yet.")
+						} else {
+							fmt.Println("\n--- Tools ---")
+							for _, tool := range toolList {
+								fmt.Printf("  [%s]\n", tool.Name)
+								fmt.Printf("    %s\n", tool.Description)
+								fmt.Printf("    $ %s\n\n", tool.Usage)
+							}
+						}
+					}
 					return
 				}
 			}
@@ -47,6 +65,7 @@ var techniqueGetCmd = &cobra.Command{
 }
 
 func init() {
+	techniqueGetCmd.Flags().BoolVarP(&showTools, "tools", "t", false, "Show associated security tools")
 	techniqueCmd.AddCommand(techniqueGetCmd)
 	rootCmd.AddCommand(techniqueCmd)
 }
