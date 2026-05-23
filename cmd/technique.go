@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/jennshaggy/organAIzedcrime/loader"
+	"github.com/jennshaggy/organAIzedcrime/renderer"
 	"github.com/spf13/cobra"
 )
 
@@ -28,8 +29,10 @@ var techniqueGetCmd = &cobra.Command{
 		for _, t := range techniques {
 			for _, ref := range t.ExternalReferences {
 				if ref.SourceName == "mitre-atlas" && ref.ExternalID == query {
+					text, refs := renderer.CleanDescription(t.Description)
 					fmt.Printf("=== [%s] %s ===\n\n", ref.ExternalID, t.Name)
-					fmt.Printf("%s\n\n", t.Description)
+					fmt.Println(text)
+					fmt.Println(renderer.FormatRefs(refs))
 					if t.IsSubtechnique {
 						fmt.Println("Type: Subtechnique")
 					} else {
