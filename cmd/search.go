@@ -36,7 +36,7 @@ var searchCmd = &cobra.Command{
 			}
 		}
 		if tacticHits == 0 {
-			fmt.Println("  No tactics matched.")
+			fmt.Println("  [-] No tactics took the bait.")
 		}
 
 		techHits := 0
@@ -59,10 +59,10 @@ var searchCmd = &cobra.Command{
 			}
 		}
 		if techHits == 0 {
-			fmt.Println("  No techniques matched.")
+			fmt.Println("  [-] No techniques surfaced. Recon harder.")
 		}
 
-		fmt.Printf("\n%d tactic(s) and %d technique(s) matched \"%s\"\n", tacticHits, techHits, query)
+		fmt.Printf("\n[+] %d tactic(s). %d technique(s). Happy hunting.\n", tacticHits, techHits)
 	},
 }
 

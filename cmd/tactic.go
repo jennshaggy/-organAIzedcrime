@@ -40,21 +40,20 @@ var tacticGetCmd = &cobra.Command{
 				}{
 					name:        t.Name,
 					description: t.Description,
+					phaseName:   strings.ToLower(strings.ReplaceAll(t.Name, " ", "-")),
 				}
-				// Derive phase name from tactic name for matching techniques
-				found.phaseName = strings.ToLower(strings.ReplaceAll(t.Name, " ", "-"))
 				break
 			}
 		}
 
 		if found == nil {
-			fmt.Printf("No tactic found matching: %s\n", query)
+			fmt.Printf("[!] That tactic doesn't exist in this timeline. Yet.\n")
 			return
 		}
 
-		fmt.Printf("=== %s ===\n\n", found.name)
+		fmt.Printf("=== [TACTIC] %s ===\n\n", found.name)
 		fmt.Printf("%s\n\n", found.description)
-		fmt.Println("--- Techniques ---")
+		fmt.Println("--- Tools of the trade ---")
 
 		for _, tech := range techniques {
 			for _, phase := range tech.KillChainPhases {

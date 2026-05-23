@@ -34,15 +34,15 @@ var techniqueGetCmd = &cobra.Command{
 					fmt.Println(text)
 					fmt.Println(renderer.FormatRefs(refs))
 					if t.IsSubtechnique {
-						fmt.Println("Type: Subtechnique")
+						fmt.Println("Class: Subtechnique. The scalpel, not the hammer.")
 					} else {
-						fmt.Println("Type: Technique")
+						fmt.Println("Class: Technique. The whole enchilada.")
 					}
 					return
 				}
 			}
 		}
-		fmt.Printf("No technique found with ID: %s\n", query)
+		fmt.Printf("[!] ID not in the matrix. Try atlas search.\n")
 	},
 }
 
