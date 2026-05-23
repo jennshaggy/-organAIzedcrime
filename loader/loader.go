@@ -4,10 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/jennshaggy/organAIzedcrime/models"
 )
-
+func AtlasDataPath() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "ATLAS.json"
+	}
+	return filepath.Join(home, ".atlas", "ATLAS.json")
+}
 func ParseBundle(path string) ([]models.Tactic, []models.Technique, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {

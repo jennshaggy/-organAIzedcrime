@@ -20,7 +20,7 @@ var techniqueGetCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		query := strings.ToUpper(args[0])
-		_, techniques, err := loader.ParseBundle("ATLAS.json")
+		_, techniques, err := loader.ParseBundle(loader.AtlasDataPath())
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -20,7 +20,7 @@ var tacticGetCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		query := strings.ToLower(strings.Join(args, " "))
-		tactics, techniques, err := loader.ParseBundle("ATLAS.json")
+		tactics, techniques, err := loader.ParseBundle(loader.AtlasDataPath())
 		if err != nil {
 			log.Fatal(err)
 		}

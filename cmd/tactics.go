@@ -17,7 +17,7 @@ var tacticsListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all ATLAS tactics",
 	Run: func(cmd *cobra.Command, args []string) {
-		tactics, _, err := loader.ParseBundle("ATLAS.json")
+		tactics, _, err := loader.ParseBundle(loader.AtlasDataPath())
 		if err != nil {
 			log.Fatal(err)
 		}

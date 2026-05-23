@@ -5,7 +5,9 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
+	"github.com/jennshaggy/organAIzedcrime/loader"
 	"github.com/spf13/cobra"
 )
 
@@ -29,7 +31,13 @@ var fetchCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		out, err := os.Create("ATLAS.json")
+		path := loader.AtlasDataPath()
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			fmt.Fprintf(os.Stderr, "Could not create directory: %v\n", err)
+			os.Exit(1)
+		}
+
+		out, err := os.Create(path)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Could not create file: %v\n", err)
 			os.Exit(1)
@@ -42,7 +50,7 @@ var fetchCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Printf("Done. %.1f KB saved to ATLAS.json\n", float64(bytes)/1024)
+		fmt.Printf("Done. %.1f KB saved to %s\n", float64(bytes)/1024, path)
 	},
 }
 
