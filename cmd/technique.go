@@ -6,12 +6,14 @@ import (
 	"strings"
 
 	"github.com/jennshaggy/organAIzedcrime/loader"
+	"github.com/jennshaggy/organAIzedcrime/payloads"
 	"github.com/jennshaggy/organAIzedcrime/renderer"
 	"github.com/jennshaggy/organAIzedcrime/tools"
 	"github.com/spf13/cobra"
 )
 
 var showTools bool
+var showPayloads bool
 
 var techniqueCmd = &cobra.Command{
 	Use:   "technique",
@@ -28,7 +30,6 @@ var techniqueGetCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		for _, t := range techniques {
 			for _, ref := range t.ExternalReferences {
 				if ref.SourceName == "mitre-atlas" && ref.ExternalID == query {
@@ -41,7 +42,6 @@ var techniqueGetCmd = &cobra.Command{
 					} else {
 						fmt.Println("Class: Technique. The whole enchilada.")
 					}
-
 					if showTools {
 						toolList := tools.Get(query)
 						if len(toolList) == 0 {
@@ -56,6 +56,24 @@ var techniqueGetCmd = &cobra.Command{
 							}
 						}
 					}
+					if showPayloads {
+						payloadList := payloads.Get(query)
+						if len(payloadList) == 0 {
+							fmt.Println("\n--- Payloads ---")
+							fmt.Println("  [-] No payloads mapped for this technique yet.")
+						} else {
+							fmt.Println("\n--- Payloads ---")
+							for _, p := range payloadList {
+								fmt.Printf("  [%s]\n", p.Name)
+								if p.ATLASGap {
+									fmt.Printf("    [!] ATLAS Gap: %s\n", p.GapNote)
+								}
+								fmt.Printf("    Template : %s\n", p.Template)
+								fmt.Printf("    Usage    : %s\n", p.UsageNote)
+								fmt.Printf("    Validated: %s\n\n", strings.Join(p.ValidatedAgainst, ", "))
+							}
+						}
+					}
 					return
 				}
 			}
@@ -66,6 +84,7 @@ var techniqueGetCmd = &cobra.Command{
 
 func init() {
 	techniqueGetCmd.Flags().BoolVarP(&showTools, "tools", "t", false, "Show associated security tools")
+	techniqueGetCmd.Flags().BoolVarP(&showPayloads, "payloads", "p", false, "Show validated attack payloads")
 	techniqueCmd.AddCommand(techniqueGetCmd)
 	rootCmd.AddCommand(techniqueCmd)
 }

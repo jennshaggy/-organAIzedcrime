@@ -6,12 +6,13 @@ import (
 	"strings"
 
 	"github.com/jennshaggy/organAIzedcrime/loader"
+	"github.com/jennshaggy/organAIzedcrime/payloads"
 	"github.com/spf13/cobra"
 )
 
 var searchCmd = &cobra.Command{
 	Use:   "search <keyword>",
-	Short: "Search tactics and techniques by keyword",
+	Short: "Search tactics, techniques, and payloads by keyword",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		query := strings.ToLower(strings.Join(args, " "))
@@ -62,7 +63,26 @@ var searchCmd = &cobra.Command{
 			fmt.Println("  [-] No techniques surfaced. Recon harder.")
 		}
 
-		fmt.Printf("\n[+] %d tactic(s). %d technique(s). Happy hunting.\n", tacticHits, techHits)
+		payloadHits := 0
+		fmt.Println("\n=== Payloads ===")
+		for _, p := range payloads.All() {
+			if strings.Contains(strings.ToLower(p.Name), query) ||
+				strings.Contains(strings.ToLower(p.Template), query) ||
+				strings.Contains(strings.ToLower(p.UsageNote), query) ||
+				strings.Contains(strings.ToLower(p.TechniqueID), query) {
+				gap := ""
+				if p.ATLASGap {
+					gap = " [ATLAS gap]"
+				}
+				fmt.Printf("  [%s] → %s%s\n", p.Name, p.TechniqueID, gap)
+				payloadHits++
+			}
+		}
+		if payloadHits == 0 {
+			fmt.Println("  [-] No payloads matched. The library is still growing.")
+		}
+
+		fmt.Printf("\n[+] %d tactic(s). %d technique(s). %d payload(s). Happy hunting.\n", tacticHits, techHits, payloadHits)
 	},
 }
 
