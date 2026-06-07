@@ -12,6 +12,8 @@ import (
 var targetURL string
 var endpointPath string
 var fieldName string
+var ollamaTarget string
+var ollamaModel string
 
 var payloadsCmd = &cobra.Command{
 	Use:   "payloads",
@@ -58,7 +60,19 @@ var payloadsGetCmd = &cobra.Command{
 		fmt.Printf("  Usage     : %s\n", p.UsageNote)
 		fmt.Printf("  Validated : %s\n", strings.Join(p.ValidatedAgainst, ", "))
 
-		if targetURL != "" {
+		if ollamaTarget != "" {
+			if ollamaModel == "" {
+				fmt.Println("[!] --ollama requires --model to specify the Ollama model name.")
+				return
+			}
+			fmt.Printf("\n[>] Firing at Ollama: %s (model: %s)\n", ollamaTarget, ollamaModel)
+			result, err := runner.RunOllama(ollamaTarget, ollamaModel, p.Template)
+			if err != nil {
+				fmt.Printf("[!] Execution failed: %s\n", err)
+				return
+			}
+			runner.PrintResult(result)
+		} else if targetURL != "" {
 			fmt.Printf("\n[>] Firing at %s%s (field: %s)\n", targetURL, endpointPath, fieldName)
 			result, err := runner.Run(targetURL, endpointPath, fieldName, p.Template)
 			if err != nil {
@@ -74,6 +88,8 @@ func init() {
 	payloadsGetCmd.Flags().StringVarP(&targetURL, "target", "T", "", "Target base URL (e.g. http://10.10.10.5)")
 	payloadsGetCmd.Flags().StringVarP(&endpointPath, "endpoint", "e", "/api/chat_stream", "API endpoint path")
 	payloadsGetCmd.Flags().StringVarP(&fieldName, "field", "f", "message", "JSON field name for the payload")
+	payloadsGetCmd.Flags().StringVarP(&ollamaTarget, "ollama", "o", "", "Ollama base URL (e.g. http://10.10.10.5:11434)")
+	payloadsGetCmd.Flags().StringVarP(&ollamaModel, "model", "m", "", "Ollama model name (e.g. challenge:latest)")
 	payloadsCmd.AddCommand(payloadsListCmd)
 	payloadsCmd.AddCommand(payloadsGetCmd)
 	rootCmd.AddCommand(payloadsCmd)
