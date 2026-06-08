@@ -109,7 +109,18 @@ var ByTechnique = map[string][]Tool{
 			Description: "Inject into RAG feedback pipelines",
 			Usage:       "curl -X POST http://target/api/feedback -H 'Content-Type: application/json' -d '{\"example\":\"[payload]\"}'",
 		},
-	},
+	},"AML.T0053": {
+                {
+                        Name:        "pyrit",
+                        Description: "Microsoft's red-teaming framework — multi-turn attack orchestration including CrescendoOrchestrator for agentic targets",
+                        Usage:       "pip install pyrit",
+                },
+                {
+                        Name:        "garak",
+                        Description: "LLM vulnerability scanner — probes for excessive agency and tool misuse",
+                        Usage:       "garak --model_type ollama --model_name llama3:8b --probes dan",
+                },
+        },
 }
 
 // Get returns tools for a given technique ID, checking exact match then parent
